@@ -1,0 +1,15 @@
+command_line:
+  - sensor:
+      name: "Prochains TER Ville1 Ville2"
+      command: "python3 /config/python_scripts/liste_prochains_TER.py ville1 ville2"
+      scan_interval: 300  # Intervalle de rafraîchissement en secondes (5 minutes)
+      json_attributes:
+        - trains
+      value_template: "{{ value_json.status }}"
+  - sensor:
+      name: "Mes TER du jour"
+      command: "python3 /config/python_scripts/mes_TER_du_jour.py"
+      scan_interval: 300  # Intervalle de rafraîchissement en secondes (5 minutes)
+      json_attributes:
+        - trains
+      value_template: "{{ value_json.status }}"

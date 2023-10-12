@@ -1,0 +1,47 @@
+type: custom:html-template-card
+title: Prochains TER Ville1 - Ville2
+ignore_line_breaks: true
+content: |
+  <style>
+    .trains_aller_table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    .trains_aller_table th,
+    .trains_aller_table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    .trains_aller_table tr:nth-child(odd) {
+      background-color: #f2f2f2;
+    }
+    .trains_aller_table tr:first-child {
+      background-color: #00A2FF;
+    }
+    .trains_aller_table tr.retard {
+      color: red;
+    }
+  </style>
+  <table class="trains_aller_table">
+    <tr>
+        <th>Train</th>
+        <th>Heure de départ</th>
+        <th>Heure d'arrivée</th>
+        <th>Depart</th>
+        <th>Arrivée</th>
+        <th>Retard</th>
+        <th>Motif du retard</th>
+    </tr>
+    {% for train in state_attr('sensor.prochains_ter_ville1_ville2', 'trains') %}
+    <tr {% if train['Retard (minutes)'] != 0 and train['Retard (minutes)'] is not none %}class="retard"{% endif %}>
+        <td>{{ train['Type de Train'] }} {{ train['Numero du Train'] }}</td>
+        <td>{% if train['Heure de Depart'] is defined and train['Heure de Depart'] is not none %}{{ train['Heure de Depart']|as_timestamp|int|timestamp_custom('%H:%M') }}{% endif %}</td>
+        <td>{% if train["Heure d'Arrivee"] is defined and train["Heure d'Arrivee"] is not none %}{{ train["Heure d'Arrivee"]|as_timestamp|int|timestamp_custom('%H:%M') }}{% endif %}</td>
+        <td>{{ train['Depart'] }}</td>
+        <td>{{ train['Arrivee'] }}</td>
+        <td>{% if train['Retard (minutes)'] != 0 and train['Retard (minutes)'] is not none %}{{ train['Retard (minutes)'] }} minutes{% endif %}</td>
+        <td>{% if train['Retard (minutes)'] != 0 and train['Retard (minutes)'] is not none %}{{ train['Motif du retard'] }}{% endif %}</td>
+    </tr>
+    {% endfor %}
+  </table>
